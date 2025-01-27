@@ -1,0 +1,27 @@
+#macOS files
+.DS_Store
+
+
+# IDE-specific files for Eclipse/STS
+.metadata/
+.settings/
+.classpath
+.project
+
+# Build directories
+target/
+build/
+bin/
+
+# Gradle files
+.gradle/
+*.war
+
+# Logs and temporary files
+*.log
+*.bak
+*.tmp
+
+# OS-specific files for Windows
+Thumbs.db
+desktop.ini
