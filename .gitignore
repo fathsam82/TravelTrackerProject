@@ -1,24 +1,30 @@
+# Ignore application properties file
+TravelTracker/TravelTracker/src/main/resources/application*.properties
+
 #macOS files
 .DS_Store
 
 
-# IDE-specific files for Eclipse/STS
+# IDE files for STS
 .metadata/
 .settings/
 .classpath
 .project
 
 # Build directories
+*.class
 target/
 build/
 bin/
 
 # Gradle files
 .gradle/
+!gradle/wrapper/gradle-wrapper.jar
 #*.war
 *.jar
 
 # Logs and temporary files
+logs/
 *.log
 *.bak
 *.tmp
@@ -26,3 +32,19 @@ bin/
 # OS-specific files for Windows
 Thumbs.db
 desktop.ini
+
+#Angular ignores
+
+node_modules/
+dist/
+out-tsc/
+coverage/
+
+
+#TypeScript compiles files
+*.js
+*.js.map
+
+#Ignore VS Code Settings
+.vscode/
+
