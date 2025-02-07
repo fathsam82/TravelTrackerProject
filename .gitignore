@@ -15,7 +15,8 @@ bin/
 
 # Gradle files
 .gradle/
-*.war
+#*.war
+*.jar
 
 # Logs and temporary files
 *.log
