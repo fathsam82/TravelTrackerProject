@@ -39,12 +39,106 @@ DROP TABLE IF EXISTS `state` ;
 CREATE TABLE IF NOT EXISTS `state` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(100) NOT NULL,
+  PRIMARY KEY (`id`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `trip_type`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `trip_type` ;
+
+CREATE TABLE IF NOT EXISTS `trip_type` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(255) NULL,
+  PRIMARY KEY (`id`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `trip`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `trip` ;
+
+CREATE TABLE IF NOT EXISTS `trip` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `length_of_trip` INT NULL,
+  `duration_of_trip` INT NULL,
   `user_id` INT NOT NULL,
+  `trip_type_id` INT NOT NULL,
   PRIMARY KEY (`id`),
-  INDEX `fk_state_user_idx` (`user_id` ASC) VISIBLE,
-  CONSTRAINT `fk_state_user`
+  INDEX `fk_trip_user1_idx` (`user_id` ASC) VISIBLE,
+  INDEX `fk_trip_trip_type1_idx` (`trip_type_id` ASC) VISIBLE,
+  CONSTRAINT `fk_trip_user1`
     FOREIGN KEY (`user_id`)
     REFERENCES `user` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_trip_trip_type1`
+    FOREIGN KEY (`trip_type_id`)
+    REFERENCES `trip_type` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `trip_state`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `trip_state` ;
+
+CREATE TABLE IF NOT EXISTS `trip_state` (
+  `trip_id` INT NOT NULL,
+  `state_id` INT NOT NULL,
+  INDEX `fk_trip_state_trip_idx` (`trip_id` ASC) VISIBLE,
+  INDEX `fk_trip_state_state1_idx` (`state_id` ASC) VISIBLE,
+  CONSTRAINT `fk_trip_state_trip`
+    FOREIGN KEY (`trip_id`)
+    REFERENCES `trip` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_trip_state_state1`
+    FOREIGN KEY (`state_id`)
+    REFERENCES `state` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `destination`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `destination` ;
+
+CREATE TABLE IF NOT EXISTS `destination` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(255) NULL,
+  `trip_id` INT NOT NULL,
+  PRIMARY KEY (`id`),
+  INDEX `fk_destination_trip1_idx` (`trip_id` ASC) VISIBLE,
+  CONSTRAINT `fk_destination_trip1`
+    FOREIGN KEY (`trip_id`)
+    REFERENCES `trip` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `experience`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `experience` ;
+
+CREATE TABLE IF NOT EXISTS `experience` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `summary` VARCHAR(1000) NULL,
+  `image_url` VARCHAR(500) NULL,
+  `trip_id` INT NOT NULL,
+  PRIMARY KEY (`id`),
+  INDEX `fk_experience_trip1_idx` (`trip_id` ASC) VISIBLE,
+  CONSTRAINT `fk_experience_trip1`
+    FOREIGN KEY (`trip_id`)
+    REFERENCES `trip` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
@@ -75,56 +169,106 @@ COMMIT;
 -- -----------------------------------------------------
 START TRANSACTION;
 USE `traveltrackerdb`;
-INSERT INTO `state` (`id`, `name`, `user_id`) VALUES (1, 'Alabama', 1);
-INSERT INTO `state` (`id`, `name`, `user_id`) VALUES (2, 'Alaska', 1);
-INSERT INTO `state` (`id`, `name`, `user_id`) VALUES (3, 'Arizona', 1);
-INSERT INTO `state` (`id`, `name`, `user_id`) VALUES (4, 'Arkansas', 1);
-INSERT INTO `state` (`id`, `name`, `user_id`) VALUES (5, 'California', 1);
-INSERT INTO `state` (`id`, `name`, `user_id`) VALUES (6, 'Colorado', 1);
-INSERT INTO `state` (`id`, `name`, `user_id`) VALUES (7, 'Connecticut', 1);
-INSERT INTO `state` (`id`, `name`, `user_id`) VALUES (8, 'Delaware', 1);
-INSERT INTO `state` (`id`, `name`, `user_id`) VALUES (9, 'Florida', 1);
-INSERT INTO `state` (`id`, `name`, `user_id`) VALUES (10, 'Georgia', 1);
-INSERT INTO `state` (`id`, `name`, `user_id`) VALUES (11, 'Hawaii', 1);
-INSERT INTO `state` (`id`, `name`, `user_id`) VALUES (12, 'Idaho', 1);
-INSERT INTO `state` (`id`, `name`, `user_id`) VALUES (13, 'Illinois', 1);
-INSERT INTO `state` (`id`, `name`, `user_id`) VALUES (14, 'Indiana', 1);
-INSERT INTO `state` (`id`, `name`, `user_id`) VALUES (15, 'Iowa', 1);
-INSERT INTO `state` (`id`, `name`, `user_id`) VALUES (16, 'Kansas', 1);
-INSERT INTO `state` (`id`, `name`, `user_id`) VALUES (17, 'Kentucky', 1);
-INSERT INTO `state` (`id`, `name`, `user_id`) VALUES (18, 'Louisiana', 1);
-INSERT INTO `state` (`id`, `name`, `user_id`) VALUES (19, 'Maine', 1);
-INSERT INTO `state` (`id`, `name`, `user_id`) VALUES (20, 'Maryland', 1);
-INSERT INTO `state` (`id`, `name`, `user_id`) VALUES (21, 'Massachusetts', 1);
-INSERT INTO `state` (`id`, `name`, `user_id`) VALUES (22, 'Michigan', 1);
-INSERT INTO `state` (`id`, `name`, `user_id`) VALUES (23, 'Minnesota', 1);
-INSERT INTO `state` (`id`, `name`, `user_id`) VALUES (24, 'Mississippi', 1);
-INSERT INTO `state` (`id`, `name`, `user_id`) VALUES (25, 'Missouri', 1);
-INSERT INTO `state` (`id`, `name`, `user_id`) VALUES (26, 'Montana', 1);
-INSERT INTO `state` (`id`, `name`, `user_id`) VALUES (27, 'Nebraska', 1);
-INSERT INTO `state` (`id`, `name`, `user_id`) VALUES (28, 'Nevada', 1);
-INSERT INTO `state` (`id`, `name`, `user_id`) VALUES (29, 'New Hampshire', 1);
-INSERT INTO `state` (`id`, `name`, `user_id`) VALUES (30, 'New Jersey', 1);
-INSERT INTO `state` (`id`, `name`, `user_id`) VALUES (31, 'New Mexico ', 1);
-INSERT INTO `state` (`id`, `name`, `user_id`) VALUES (32, 'New York', 1);
-INSERT INTO `state` (`id`, `name`, `user_id`) VALUES (33, 'North Carolina', 1);
-INSERT INTO `state` (`id`, `name`, `user_id`) VALUES (34, 'North Dakota', 1);
-INSERT INTO `state` (`id`, `name`, `user_id`) VALUES (35, 'Ohio', 1);
-INSERT INTO `state` (`id`, `name`, `user_id`) VALUES (36, 'Oklahoma', 1);
-INSERT INTO `state` (`id`, `name`, `user_id`) VALUES (37, 'Oregon', 1);
-INSERT INTO `state` (`id`, `name`, `user_id`) VALUES (38, 'Pennsylvania', 1);
-INSERT INTO `state` (`id`, `name`, `user_id`) VALUES (39, 'Rhode Island', 1);
-INSERT INTO `state` (`id`, `name`, `user_id`) VALUES (40, 'South Carolina', 1);
-INSERT INTO `state` (`id`, `name`, `user_id`) VALUES (41, 'South Dakota', 1);
-INSERT INTO `state` (`id`, `name`, `user_id`) VALUES (42, 'Tennesee', 1);
-INSERT INTO `state` (`id`, `name`, `user_id`) VALUES (43, 'Texas', 1);
-INSERT INTO `state` (`id`, `name`, `user_id`) VALUES (44, 'Utah', 1);
-INSERT INTO `state` (`id`, `name`, `user_id`) VALUES (45, 'Vermont', 1);
-INSERT INTO `state` (`id`, `name`, `user_id`) VALUES (46, 'Virginia', 1);
-INSERT INTO `state` (`id`, `name`, `user_id`) VALUES (47, 'Washington', 1);
-INSERT INTO `state` (`id`, `name`, `user_id`) VALUES (48, 'West Virginia', 1);
-INSERT INTO `state` (`id`, `name`, `user_id`) VALUES (49, 'Wisconsin', 1);
-INSERT INTO `state` (`id`, `name`, `user_id`) VALUES (50, 'Wyoming', 1);
+INSERT INTO `state` (`id`, `name`) VALUES (1, 'Alabama');
+INSERT INTO `state` (`id`, `name`) VALUES (2, 'Alaska');
+INSERT INTO `state` (`id`, `name`) VALUES (3, 'Arizona');
+INSERT INTO `state` (`id`, `name`) VALUES (4, 'Arkansas');
+INSERT INTO `state` (`id`, `name`) VALUES (5, 'California');
+INSERT INTO `state` (`id`, `name`) VALUES (6, 'Colorado');
+INSERT INTO `state` (`id`, `name`) VALUES (7, 'Connecticut');
+INSERT INTO `state` (`id`, `name`) VALUES (8, 'Delaware');
+INSERT INTO `state` (`id`, `name`) VALUES (9, 'Florida');
+INSERT INTO `state` (`id`, `name`) VALUES (10, 'Georgia');
+INSERT INTO `state` (`id`, `name`) VALUES (11, 'Hawaii');
+INSERT INTO `state` (`id`, `name`) VALUES (12, 'Idaho');
+INSERT INTO `state` (`id`, `name`) VALUES (13, 'Illinois');
+INSERT INTO `state` (`id`, `name`) VALUES (14, 'Indiana');
+INSERT INTO `state` (`id`, `name`) VALUES (15, 'Iowa');
+INSERT INTO `state` (`id`, `name`) VALUES (16, 'Kansas');
+INSERT INTO `state` (`id`, `name`) VALUES (17, 'Kentucky');
+INSERT INTO `state` (`id`, `name`) VALUES (18, 'Louisiana');
+INSERT INTO `state` (`id`, `name`) VALUES (19, 'Maine');
+INSERT INTO `state` (`id`, `name`) VALUES (20, 'Maryland');
+INSERT INTO `state` (`id`, `name`) VALUES (21, 'Massachusetts');
+INSERT INTO `state` (`id`, `name`) VALUES (22, 'Michigan');
+INSERT INTO `state` (`id`, `name`) VALUES (23, 'Minnesota');
+INSERT INTO `state` (`id`, `name`) VALUES (24, 'Mississippi');
+INSERT INTO `state` (`id`, `name`) VALUES (25, 'Missouri');
+INSERT INTO `state` (`id`, `name`) VALUES (26, 'Montana');
+INSERT INTO `state` (`id`, `name`) VALUES (27, 'Nebraska');
+INSERT INTO `state` (`id`, `name`) VALUES (28, 'Nevada');
+INSERT INTO `state` (`id`, `name`) VALUES (29, 'New Hampshire');
+INSERT INTO `state` (`id`, `name`) VALUES (30, 'New Jersey');
+INSERT INTO `state` (`id`, `name`) VALUES (31, 'New Mexico ');
+INSERT INTO `state` (`id`, `name`) VALUES (32, 'New York');
+INSERT INTO `state` (`id`, `name`) VALUES (33, 'North Carolina');
+INSERT INTO `state` (`id`, `name`) VALUES (34, 'North Dakota');
+INSERT INTO `state` (`id`, `name`) VALUES (35, 'Ohio');
+INSERT INTO `state` (`id`, `name`) VALUES (36, 'Oklahoma');
+INSERT INTO `state` (`id`, `name`) VALUES (37, 'Oregon');
+INSERT INTO `state` (`id`, `name`) VALUES (38, 'Pennsylvania');
+INSERT INTO `state` (`id`, `name`) VALUES (39, 'Rhode Island');
+INSERT INTO `state` (`id`, `name`) VALUES (40, 'South Carolina');
+INSERT INTO `state` (`id`, `name`) VALUES (41, 'South Dakota');
+INSERT INTO `state` (`id`, `name`) VALUES (42, 'Tennesee');
+INSERT INTO `state` (`id`, `name`) VALUES (43, 'Texas');
+INSERT INTO `state` (`id`, `name`) VALUES (44, 'Utah');
+INSERT INTO `state` (`id`, `name`) VALUES (45, 'Vermont');
+INSERT INTO `state` (`id`, `name`) VALUES (46, 'Virginia');
+INSERT INTO `state` (`id`, `name`) VALUES (47, 'Washington');
+INSERT INTO `state` (`id`, `name`) VALUES (48, 'West Virginia');
+INSERT INTO `state` (`id`, `name`) VALUES (49, 'Wisconsin');
+INSERT INTO `state` (`id`, `name`) VALUES (50, 'Wyoming');
+
+COMMIT;
+
+
+-- -----------------------------------------------------
+-- Data for table `trip_type`
+-- -----------------------------------------------------
+START TRANSACTION;
+USE `traveltrackerdb`;
+INSERT INTO `trip_type` (`id`, `name`) VALUES (1, 'vacation');
+
+COMMIT;
+
+
+-- -----------------------------------------------------
+-- Data for table `trip`
+-- -----------------------------------------------------
+START TRANSACTION;
+USE `traveltrackerdb`;
+INSERT INTO `trip` (`id`, `length_of_trip`, `duration_of_trip`, `user_id`, `trip_type_id`) VALUES (1, NULL, NULL, 1, 1);
+
+COMMIT;
+
+
+-- -----------------------------------------------------
+-- Data for table `trip_state`
+-- -----------------------------------------------------
+START TRANSACTION;
+USE `traveltrackerdb`;
+INSERT INTO `trip_state` (`trip_id`, `state_id`) VALUES (1, 1);
+
+COMMIT;
+
+
+-- -----------------------------------------------------
+-- Data for table `destination`
+-- -----------------------------------------------------
+START TRANSACTION;
+USE `traveltrackerdb`;
+INSERT INTO `destination` (`id`, `name`, `trip_id`) VALUES (1, NULL, 1);
+
+COMMIT;
+
+
+-- -----------------------------------------------------
+-- Data for table `experience`
+-- -----------------------------------------------------
+START TRANSACTION;
+USE `traveltrackerdb`;
+INSERT INTO `experience` (`id`, `summary`, `image_url`, `trip_id`) VALUES (DEFAULT, NULL, NULL, 1);
 
 COMMIT;
 
