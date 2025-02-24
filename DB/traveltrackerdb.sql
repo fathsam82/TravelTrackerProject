@@ -159,7 +159,7 @@ SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
 -- -----------------------------------------------------
 START TRANSACTION;
 USE `traveltrackerdb`;
-INSERT INTO `user` (`id`, `username`, `email`, `password`, `enabled`, `role`) VALUES (1, 'samwise', 'lol@aol.com', '123', 1, 'standard');
+INSERT INTO `user` (`id`, `username`, `email`, `password`, `enabled`, `role`) VALUES (1, 'samwise', 'lol@aol.com', '$2a$10$tu5Pm.mGfjl7aMpjJ9e5aeZ9Q4cDQUN16bS5cxLxTU56EmO8rhEKe', 1, 'standard');
 
 COMMIT;
 
