@@ -8,4 +8,6 @@ public interface AuthService {
 
 	User getUserbyUsername(String username);
 
+	User authenticateUser(String username, String password);
+
 }

@@ -43,6 +43,9 @@ export class AuthService {
       catchError((err) => this.handleError('Register')(err))
     );
   }
+
+
+  
   
   //Centralized error handling function
   private handleError(operation: string) {

@@ -25,8 +25,6 @@ import jakarta.servlet.http.HttpServletResponse;
 @CrossOrigin({ "*", "http://localhost/" })
 public class AuthController {
 
-	@Autowired
-	private AuthenticationManager authenticationManager;
 
 	@Autowired
 	private AuthService authService;
@@ -42,18 +40,19 @@ public class AuthController {
 
 	}
 
-	@PostMapping("authenticate")
+	@PostMapping("login")
 	public ResponseEntity<?> authenticate(@RequestBody LoginRequestDTO loginRequest) {
-		try {
-			UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
-					loginRequest.getUsername(), loginRequest.getPassword());
-			Authentication authentication = authenticationManager.authenticate(authToken);
-			User authenticatedUser = authService.getUserbyUsername(loginRequest.getUsername());
-			return ResponseEntity.ok(authenticatedUser);
-		} catch (AuthenticationException e) {
-			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password");
-		}
-
+	    try {
+	    	User authenticatedUser = authService.authenticateUser(loginRequest.getUsername(), loginRequest.getPassword());
+	      LoginRequestDTO loginRequestDTO = new LoginRequestDTO(
+	    		  authenticatedUser.getUsername(),
+	    		  authenticatedUser.getPassword()
+	    		  );
+	        return ResponseEntity.ok(loginRequestDTO);
+	    } catch (AuthenticationException e) {
+	        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+	                             .body("Invalid username or password");
+	    }
 	}
 
 }

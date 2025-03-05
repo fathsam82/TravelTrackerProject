@@ -3,6 +3,9 @@ package com.personalproject.traveltracker.services;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +22,9 @@ public class AuthServiceImpl implements AuthService {
 
 	@Autowired
 	private PasswordEncoder encoder;
+	
+	@Autowired
+	private AuthenticationManager authenticationManager;
 
 	@Override
 	public User register(User user) {
@@ -37,5 +43,16 @@ public class AuthServiceImpl implements AuthService {
 		return userOpt.orElseThrow(() -> new EntityNotFoundException("User not found for " + username));
 
 	}
+	
+	@Override
+	public User authenticateUser(String username, String password) {
+        UsernamePasswordAuthenticationToken authToken =
+                new UsernamePasswordAuthenticationToken(username, password);
+
+      //  Authentication authentication = 
+        		authenticationManager.authenticate(authToken);
+
+        return getUserbyUsername(username);
+    }
 
 }
